@@ -1,43 +1,29 @@
 <script setup>
+import axios from 'axios';
+import { ref } from 'vue';
 
-const handleClick = () => {
-    console.log('click')
-}
-
-
-const tableData = [
-    {
-        stu_id: '1',
-        stu_name: 'Tom',
-        stu_class: '18',
-        attendance_id: 'A',
-        time: '05-03',
-        status: '旷课×'
-
-    },
-    {
-        stu_id: '1',
-        stu_name: 'Tom',
-        stu_class: '18',
-        attendance_id: 'A',
-        time: '05-03',
-        status: '出勤√'
-    },
-]
+const tableData = ref(null)
+axios.get("http://localhost:8080/attendance/select/all")
+    .then(response => {
+        tableData.value = response.data.data
+    })
+    .catch(error => {
+        console.log(error)
+    })
 
 const filterTag = (value, row) => {
-    return row.status.includes(value)
+    return row.attendanceStatus === value
 }
 </script>
 
 <template>
-    <el-table :data="tableData" style="width: 100%">
-        <el-table-column prop="stu_id" label="学号" width="120" />
-        <el-table-column prop="stu_name" label="姓名" width="120" />
-        <el-table-column prop="stu_class" label="班级" width="120" />
-        <el-table-column prop="attendance_id" label="考勤编号" width="120" />
-        <el-table-column prop="time" label="考勤时间" width="250" />
-        <el-table-column prop="status" label="考勤状态" width="120" :filters="[
+    <el-table :data="tableData">
+        <el-table-column prop="studentId" label="学号" width="120" />
+        <el-table-column prop="studentName" label="姓名" width="120" />
+        <el-table-column prop="studentSection" label="班级" width="120" />
+        <el-table-column prop="attendanceId" label="考勤编号" width="120" />
+        <el-table-column prop="attendanceTime" label="考勤时间" width="250" />
+        <el-table-column prop="attendanceStatus" label="考勤状态" width="120" :filters="[
             { text: '出勤√', value: '出勤√' },
             { text: '旷课X', value: '旷课X' },
             { text: '事假△', value: '事假△' },
@@ -46,7 +32,7 @@ const filterTag = (value, row) => {
             { text: '早退–', value: '早退–' },
         ]" :filter-method="filterTag" filter-placement="bottom-end">
             <template #default="scope">
-                <el-tag disable-transitions>{{ scope.row.status }}
+                <el-tag disable-transitions>{{ scope.row.attendanceStatus }}
                 </el-tag>
             </template>
         </el-table-column>
