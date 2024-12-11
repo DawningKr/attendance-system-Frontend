@@ -7,27 +7,26 @@ const handleClick = () => {
 
 const tableData = [
     {
-        stu_id:'1',
+        stu_id: '1',
         stu_name: 'Tom',
         stu_class: '18',
         attendance_id: 'A',
         time: '05-03',
-        status: ''
+        status: '旷课×'
 
     },
     {
-        stu_id:'1',
+        stu_id: '1',
         stu_name: 'Tom',
         stu_class: '18',
         attendance_id: 'A',
         time: '05-03',
-        status: '出勤'
+        status: '出勤√'
     },
-  ]
+]
 
-  const filterTag = (value, row) => {
-    console.log('fliter',value,row)
-    return row.text === value
+const filterTag = (value, row) => {
+    return row.status.includes(value)
 }
 </script>
 
@@ -37,26 +36,17 @@ const tableData = [
         <el-table-column prop="stu_name" label="姓名" width="120" />
         <el-table-column prop="stu_class" label="班级" width="120" />
         <el-table-column prop="attendance_id" label="考勤编号" width="120" />
-        <el-table-column prop="time" label="考勤日期（月日）" width="250" />
-        <el-table-column
-            prop="status"
-            label="考勤状态"
-            width="120"
-            :filters="[
-                { text: '出勤', value: '出勤' },
-                { text: '旷课', value: 1 },
-                { text: '事假', value: 2 },
-                { text: '病假', value: 3 },
-                { text: '迟到', value: 4 },
-                { text: '早退', value: 5 },
-            ]"
-            :filter-method="filterTag"
-            filter-placement="bottom-end"
-        >
+        <el-table-column prop="time" label="考勤时间" width="250" />
+        <el-table-column prop="status" label="考勤状态" width="120" :filters="[
+            { text: '出勤√', value: '出勤√' },
+            { text: '旷课X', value: '旷课X' },
+            { text: '事假△', value: '事假△' },
+            { text: '病假○', value: '病假○' },
+            { text: '迟到+', value: '迟到+' },
+            { text: '早退–', value: '早退–' },
+        ]" :filter-method="filterTag" filter-placement="bottom-end">
             <template #default="scope">
-                <el-tag
-                disable-transitions
-            >{{ scope.row.status }}
+                <el-tag disable-transitions>{{ scope.row.status }}
                 </el-tag>
             </template>
         </el-table-column>
@@ -70,11 +60,13 @@ const tableData = [
 
 <style scoped>
 table {
-  width: 100%;
-  border-collapse: collapse;
+    width: 100%;
+    border-collapse: collapse;
 }
-th, td {
-  padding: 10px;
-  text-align: left;
+
+th,
+td {
+    padding: 10px;
+    text-align: left;
 }
 </style>
