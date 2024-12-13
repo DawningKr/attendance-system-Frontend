@@ -5,8 +5,10 @@ import TablePage from '../components/TablePage.vue';
 import EditPage from '../components/EditPage.vue';
 import DeletePage from '../components/DeletePage.vue';
 import AddPage from '../components/AddPage.vue'
-import SearchPage from '../components/SearchPage.vue';
-
+import IDSearchPage from '../components/IdSearchPage.vue';
+import DateSearchPage from '../components/DateSearchPage.vue';
+import { pa } from 'element-plus/es/locales.mjs';
+import component from 'element-plus/es/components/tree-select/src/tree-select-option.mjs';
 
 const routes = [
   {
@@ -35,9 +37,14 @@ const routes = [
     name: 'addPage'
   },
   {
-    path: '/search',
-    component: SearchPage,
-    name: 'searchPage'
+    path: '/idSearch',
+    component: IDSearchPage,
+    name: 'idSearchPage'
+  }, 
+  {
+    path: '/dateSearch',
+    component: DateSearchPage,
+    name: 'dateSearchPage'
   }
 ];
 

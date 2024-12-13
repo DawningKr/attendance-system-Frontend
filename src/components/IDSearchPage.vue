@@ -5,20 +5,26 @@ import axios from "axios";
 import { ElMessage } from "element-plus";
 
 const router = useRouter();
-const studentId = ref('')
+const studentId = ref("");
 
 const tableData = ref([]);
 
 const search = () => {
-  if(studentId.value === ''){
-    ElMessage.error('您还未输入，请重试！')
-    return
+  if (studentId.value === "") {
+    ElMessage.error("您还未输入，请重试！");
+    return;
   }
   axios
-    .get("http://localhost:8080/attendance/select/studentId/" + studentId.value.toString())
+    .get(
+      "http://localhost:8080/attendance/select/studentId/" +
+        studentId.value.toString()
+    )
     .then((response) => {
-      console.log(response.data.data)
-      tableData.value = response.data.data;
+      const info = response.data;
+      if (info.data.length == 0) {
+        ElMessage.info("未查询到结果");
+      }
+      tableData.value = info.data;
     })
     .catch((error) => {
       console.log(error);
@@ -38,10 +44,17 @@ const remove = (id) => {
   <div>
     <div class="container">
       <div class="form-part">
-        <el-input v-model="studentId" style="width: 240px" placeholder="请输入学号"/>
+        <h5>请输入学号</h5>
+        <el-input
+          v-model="studentId"
+          style="width: 240px"
+          placeholder="请输入学号"
+        />
       </div>
       <div class="submit-part">
-        <el-button type="primary" @click="search">search</el-button>
+        <el-button type="primary" size="large" @click="search"
+          >Search</el-button
+        >
       </div>
       <div v-if="tableData.length > 0">
         <div class="result">
@@ -50,7 +63,7 @@ const remove = (id) => {
               sortable
               prop="studentId"
               label="学号"
-              width="80"
+              width="120"
             />
             <el-table-column
               sortable
@@ -62,12 +75,6 @@ const remove = (id) => {
               sortable
               prop="studentSection"
               label="班级"
-              width="80"
-            />
-            <el-table-column
-              sortable
-              prop="attendanceId"
-              label="考勤编号"
               width="120"
             />
             <el-table-column
@@ -87,7 +94,7 @@ const remove = (id) => {
                 </el-tag>
               </template>
             </el-table-column>
-            <el-table-column label="options" width="260">
+            <el-table-column label="options" width="120">
               <template #default="scope">
                 <el-button
                   link
@@ -126,22 +133,27 @@ const remove = (id) => {
 
 .form-part {
   width: 500px;
-  height: 300px;
+  height: 150px;
   background-color: greenyellow;
   border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
 }
 
 .submit-part {
   width: 500px;
-  height: 120px;
+  height: 80px;
   background-color: aqua;
   border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .result {
   background-color: yellow;
+  overflow-y: auto;
 }
 </style>

@@ -3,6 +3,7 @@ import { reactive, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import axios from "axios";
 import Info from "./Info.vue";
+import { ElMessage } from "element-plus";
 
 const route = useRoute();
 const router = useRouter();
@@ -57,8 +58,8 @@ const submit = () => {
   axios
     .put("http://localhost:8080/attendance/update", formData)
     .then((response) => {
-      if (response.data.data === null) {
-        alert(response.data.msg);
+      if (response.data.isSucceed == false) {
+        ElMessage.error(response.data.msg);
       }
     })
     .catch((error) => {
